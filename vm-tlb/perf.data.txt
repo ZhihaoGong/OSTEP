@@ -1,0 +1,8 @@
+            perf 20622 20254.088041:          1 cycles:ppp:  ffffffff8a26f304 [unknown] ([kernel.kallsyms])
+            perf 20622 20254.088044:          1 cycles:ppp:  ffffffff8a26f304 [unknown] ([kernel.kallsyms])
+            perf 20622 20254.088046:          9 cycles:ppp:  ffffffff8a26f304 [unknown] ([kernel.kallsyms])
+            perf 20622 20254.088047:        172 cycles:ppp:  ffffffff8a26f306 [unknown] ([kernel.kallsyms])
+            perf 20622 20254.088049:       3408 cycles:ppp:  ffffffff8a26f304 [unknown] ([kernel.kallsyms])
+            perf 20622 20254.088051:      66640 cycles:ppp:  ffffffff8a3bff20 [unknown] ([kernel.kallsyms])
+              ls 20622 20254.088075:    1146915 cycles:ppp:  ffffffff8a664bfa [unknown] ([kernel.kallsyms])
+              ls 20622 20254.089058:    2527926 cycles:ppp:  ffffffff8a418fcf [unknown] ([kernel.kallsyms])

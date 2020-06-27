@@ -1,0 +1,157 @@
+	.file	"tlb_measuerment.c"
+	.section	.rodata.str1.8,"aMS",@progbits,1
+	.align 8
+.LC0:
+	.string	"Usage ./measure <number of pages>"
+	.section	.rodata.str1.1,"aMS",@progbits,1
+.LC3:
+	.string	"a"
+.LC4:
+	.string	"tlb_measure.dat"
+.LC5:
+	.string	"%d    %lf\n"
+	.section	.text.unlikely,"ax",@progbits
+.LCOLDB6:
+	.section	.text.startup,"ax",@progbits
+.LHOTB6:
+	.p2align 4,,15
+	.globl	main
+	.type	main, @function
+main:
+.LFB49:
+	.cfi_startproc
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	subq	$72, %rsp
+	.cfi_def_cfa_offset 112
+	movq	%fs:40, %rax
+	movq	%rax, 56(%rsp)
+	xorl	%eax, %eax
+	cmpl	$2, %edi
+	jne	.L11
+	leaq	16(%rsp), %rdi
+	movq	%rsi, %rbx
+	xorl	%esi, %esi
+	call	gettimeofday
+	movq	8(%rbx), %rdi
+	xorl	%esi, %esi
+	movl	$10, %edx
+	call	strtol
+	movl	$30, %edi
+	movq	%rax, %r12
+	movl	%r12d, %ebx
+	call	sysconf
+	shrq	$2, %rax
+	imull	%eax, %ebx
+	movq	%rax, %rbp
+	movl	%eax, %r13d
+	movslq	%ebx, %rdi
+	salq	$2, %rdi
+	call	malloc
+	movslq	%ebp, %rsi
+	movl	$10000, %edi
+	salq	$2, %rsi
+	.p2align 4,,10
+	.p2align 3
+.L3:
+	testl	%ebx, %ebx
+	jle	.L6
+	movq	%rax, %rdx
+	xorl	%ecx, %ecx
+	.p2align 4,,10
+	.p2align 3
+.L4:
+	addl	%r13d, %ecx
+	addl	$1, (%rdx)
+	addq	%rsi, %rdx
+	cmpl	%ecx, %ebx
+	jg	.L4
+.L6:
+	subl	$1, %edi
+	jne	.L3
+	leaq	32(%rsp), %rdi
+	xorl	%esi, %esi
+	call	gettimeofday
+	movq	32(%rsp), %rax
+	subq	16(%rsp), %rax
+	movl	$.LC3, %esi
+	pxor	%xmm0, %xmm0
+	movl	$.LC4, %edi
+	movsd	.LC1(%rip), %xmm1
+	cvtsi2sdq	%rax, %xmm0
+	movq	40(%rsp), %rax
+	subq	24(%rsp), %rax
+	mulsd	%xmm0, %xmm1
+	pxor	%xmm0, %xmm0
+	cvtsi2sdq	%rax, %xmm0
+	imull	$10000, %r12d, %eax
+	mulsd	.LC2(%rip), %xmm0
+	addsd	%xmm1, %xmm0
+	pxor	%xmm1, %xmm1
+	cvtsi2sd	%eax, %xmm1
+	divsd	%xmm1, %xmm0
+	movsd	%xmm0, 8(%rsp)
+	call	fopen
+	movsd	8(%rsp), %xmm0
+	movq	%rax, %rdi
+	movq	%rax, %rbx
+	movl	%r12d, %ecx
+	movl	$.LC5, %edx
+	movl	$1, %esi
+	movl	$1, %eax
+	call	__fprintf_chk
+	movq	%rbx, %rdi
+	call	fclose
+	xorl	%eax, %eax
+	movq	56(%rsp), %rdi
+	xorq	%fs:40, %rdi
+	jne	.L12
+	addq	$72, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+.L11:
+	.cfi_restore_state
+	movl	$1, %edi
+	movl	$.LC0, %esi
+	call	__printf_chk
+	movl	$1, %edi
+	call	exit
+.L12:
+	call	__stack_chk_fail
+	.cfi_endproc
+.LFE49:
+	.size	main, .-main
+	.section	.text.unlikely
+.LCOLDE6:
+	.section	.text.startup
+.LHOTE6:
+	.section	.rodata.cst8,"aM",@progbits,8
+	.align 8
+.LC1:
+	.long	0
+	.long	1104006501
+	.align 8
+.LC2:
+	.long	0
+	.long	1083129856
+	.ident	"GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609"
+	.section	.note.GNU-stack,"",@progbits

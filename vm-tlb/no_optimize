@@ -1,0 +1,163 @@
+	.file	"tlb_measuerment.c"
+	.section	.rodata
+	.align 8
+.LC0:
+	.string	"Usage ./measure <number of pages>"
+.LC3:
+	.string	"a"
+.LC4:
+	.string	"tlb_measure.dat"
+.LC5:
+	.string	"%d    %lf\n"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB2:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$160, %rsp
+	movl	%edi, -132(%rbp)
+	movq	%rsi, -144(%rbp)
+	movq	%fs:40, %rax
+	movq	%rax, -8(%rbp)
+	xorl	%eax, %eax
+	cmpl	$2, -132(%rbp)
+	je	.L2
+	movl	$.LC0, %edi
+	movl	$0, %eax
+	call	printf
+	movl	$1, %edi
+	call	exit
+.L2:
+	leaq	-48(%rbp), %rax
+	movl	$0, %esi
+	movq	%rax, %rdi
+	call	gettimeofday
+	movq	-144(%rbp), %rax
+	addq	$8, %rax
+	movq	(%rax), %rax
+	movq	%rax, %rdi
+	call	atoi
+	movl	%eax, -116(%rbp)
+	movl	$30, %edi
+	call	sysconf
+	movq	%rax, -104(%rbp)
+	movq	-104(%rbp), %rax
+	shrq	$2, %rax
+	movl	%eax, -112(%rbp)
+	movl	-116(%rbp), %eax
+	imull	-112(%rbp), %eax
+	cltq
+	salq	$2, %rax
+	movq	%rax, %rdi
+	call	malloc
+	movq	%rax, -96(%rbp)
+	movl	$10000, -108(%rbp)
+	movl	$0, -124(%rbp)
+	jmp	.L3
+.L6:
+	movl	$0, -120(%rbp)
+	jmp	.L4
+.L5:
+	movl	-120(%rbp), %eax
+	cltq
+	leaq	0(,%rax,4), %rdx
+	movq	-96(%rbp), %rax
+	addq	%rdx, %rax
+	movl	-120(%rbp), %edx
+	movslq	%edx, %rdx
+	leaq	0(,%rdx,4), %rcx
+	movq	-96(%rbp), %rdx
+	addq	%rcx, %rdx
+	movl	(%rdx), %edx
+	addl	$1, %edx
+	movl	%edx, (%rax)
+	movl	-112(%rbp), %eax
+	addl	%eax, -120(%rbp)
+.L4:
+	movl	-116(%rbp), %eax
+	imull	-112(%rbp), %eax
+	cmpl	-120(%rbp), %eax
+	jg	.L5
+	addl	$1, -124(%rbp)
+.L3:
+	movl	-124(%rbp), %eax
+	cmpl	-108(%rbp), %eax
+	jl	.L6
+	leaq	-32(%rbp), %rax
+	movl	$0, %esi
+	movq	%rax, %rdi
+	call	gettimeofday
+	movq	-32(%rbp), %rdx
+	movq	-48(%rbp), %rax
+	subq	%rax, %rdx
+	movq	%rdx, %rax
+	pxor	%xmm0, %xmm0
+	cvtsi2sdq	%rax, %xmm0
+	movsd	.LC1(%rip), %xmm1
+	mulsd	%xmm1, %xmm0
+	movsd	%xmm0, -88(%rbp)
+	movq	-24(%rbp), %rdx
+	movq	-40(%rbp), %rax
+	subq	%rax, %rdx
+	movq	%rdx, %rax
+	pxor	%xmm0, %xmm0
+	cvtsi2sdq	%rax, %xmm0
+	movsd	.LC2(%rip), %xmm1
+	mulsd	%xmm1, %xmm0
+	movsd	%xmm0, -80(%rbp)
+	movsd	-88(%rbp), %xmm0
+	addsd	-80(%rbp), %xmm0
+	movsd	%xmm0, -72(%rbp)
+	movl	-116(%rbp), %eax
+	imull	-108(%rbp), %eax
+	pxor	%xmm0, %xmm0
+	cvtsi2sd	%eax, %xmm0
+	movsd	-72(%rbp), %xmm1
+	divsd	%xmm0, %xmm1
+	movapd	%xmm1, %xmm0
+	movsd	%xmm0, -64(%rbp)
+	movl	$.LC3, %esi
+	movl	$.LC4, %edi
+	call	fopen
+	movq	%rax, -56(%rbp)
+	movq	-64(%rbp), %rcx
+	movl	-116(%rbp), %edx
+	movq	-56(%rbp), %rax
+	movq	%rcx, -152(%rbp)
+	movsd	-152(%rbp), %xmm0
+	movl	$.LC5, %esi
+	movq	%rax, %rdi
+	movl	$1, %eax
+	call	fprintf
+	movq	-56(%rbp), %rax
+	movq	%rax, %rdi
+	call	fclose
+	movl	$0, %eax
+	movq	-8(%rbp), %rcx
+	xorq	%fs:40, %rcx
+	je	.L8
+	call	__stack_chk_fail
+.L8:
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE2:
+	.size	main, .-main
+	.section	.rodata
+	.align 8
+.LC1:
+	.long	0
+	.long	1104006501
+	.align 8
+.LC2:
+	.long	0
+	.long	1083129856
+	.ident	"GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609"
+	.section	.note.GNU-stack,"",@progbits
