@@ -1,7 +1,16 @@
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <pthread.h>
+#include <errno.h>
+#include <assert.h>
+
+
+#define handle_error_en(en, msg) \
+           do { errno = en; perror(msg); exit(EXIT_FAILURE); } while (0)
+
 
 int main(int argc, char *argv[])
 {
@@ -11,6 +20,25 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
+    // pin a thread
+    cpu_set_t cpuset;
+    pthread_t thread;
+    thread = pthread_self();
+
+    CPU_ZERO(&cpuset);
+    CPU_SET(0, &cpuset);
+
+    int s = pthread_setaffinity_np(thread, sizeof(cpu_set_t), &cpuset);
+    if (s != 0)
+        handle_error_en(s, "pthread_setaffinity_np");
+    
+    s = pthread_getaffinity_np(thread, sizeof(cpu_set_t), &cpuset);
+    if (s != 0)
+        handle_error_en(s, "pthread_getaffinity_np");
+    assert(CPU_ISSET(0, &cpuset));
+
+    
+    // start measurement
     struct timeval start_time;
     struct timeval end_time;
   
