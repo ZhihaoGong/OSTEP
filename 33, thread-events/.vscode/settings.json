@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "ioctl.h": "c",
+        "cerrno": "c",
+        "unistd.h": "c",
+        "utils.h": "c"
+    }
+}
