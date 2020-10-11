@@ -16,3 +16,4 @@ for line in traceFile:
 
 traceFile.close()
 vpnFile.close()
+
